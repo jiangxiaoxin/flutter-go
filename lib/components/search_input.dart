@@ -253,6 +253,13 @@ class _MaterialSearchPageRoute<T> extends MaterialPageRoute<T> {
             fullscreenDialog: fullscreenDialog);
 }
 
+//TODO：整个搜索的逻辑还是有点小复杂的，主要是一层一层深入传递下去，最后拆分成几个小的组件
+/// SearchInput -> MaterialSearchInput
+/// SearchInput头部搜索栏，children里有个MaterialSearchInput，是个TextField而已，定义了点击之后的函数，点击之后通过Navigator就进入了一个新的Route，新的Route（也就是新页）有头部输入和下面的历史记录.
+/// 这个进入的新页就是 MaterialSearch，在它的state的build里创建了历史记录和搜索结果
+/// 搜索记录可以用圆角做
+
+
 class MaterialSearchInput<T> extends StatefulWidget {
   MaterialSearchInput({
     Key key,
@@ -311,7 +318,7 @@ class _MaterialSearchInputState<T> extends State<MaterialSearchInput<T>> {
 
   _showMaterialSearch(BuildContext context) {
     Navigator.of(context)
-        .push(_buildMaterialSearchPage(context))
+        .push(_buildMaterialSearchPage(context))  /// 展示新页了
         .then((dynamic value) {
       if (value != null) {
         _formFieldKey.currentState.didChange(value);
@@ -334,7 +341,7 @@ class _MaterialSearchInputState<T> extends State<MaterialSearchInput<T>> {
     final TextStyle valueStyle = Theme.of(context).textTheme.subhead;
 
     return new InkWell(
-      onTap: () => _showMaterialSearch(context),
+      onTap: () => _showMaterialSearch(context), /// 点击后显示新的搜索和历史记录页面
       child: new FormField<T>(
         key: _formFieldKey,
         validator: widget.validator,
@@ -361,6 +368,8 @@ class _MaterialSearchInputState<T> extends State<MaterialSearchInput<T>> {
     );
   }
 }
+
+
 
 ///搜索框
 class SearchInput extends StatelessWidget {

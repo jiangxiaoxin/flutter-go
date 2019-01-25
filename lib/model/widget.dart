@@ -95,6 +95,7 @@ class WidgetPoint implements WidgetInterface {
       return {};
     }
 
+    // TODO：这个condition和this.toMap()之后都是一样的key-value对象，就是把空的去掉了，有什么特殊意义吗？
     return condition;
   }
 }

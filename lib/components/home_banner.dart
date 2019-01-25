@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import '../model/story.dart';
 
+/// 首页的轮播图
 class HomeBanner extends StatefulWidget {
   final List<StoryModel> bannerStories;
   final OnTapBannerItem onTap;
@@ -50,7 +51,8 @@ class _BannerState extends State<HomeBanner> {
             PageView(
               controller: controller,
               onPageChanged: _onPageChanged,
-              children: _buildItems(),),
+              children: _buildItems()
+            ),
             _buildIndicator(), // 下面的小点
           ]),
     );
@@ -61,14 +63,15 @@ class _BannerState extends State<HomeBanner> {
     if (widget.bannerStories.length > 0) {
       // 头部添加一个尾部Item，模拟循环
       items.add(
-          _buildItem(widget.bannerStories[widget.bannerStories.length - 1]));
+          _buildItem(widget.bannerStories[widget.bannerStories.length - 1])
+      );
       // 正常添加Item
       items.addAll(
           widget.bannerStories.map((story) => _buildItem(story)).toList(
-              growable: false));
+              growable: false)
+      );
       // 尾部
-      items.add(
-          _buildItem(widget.bannerStories[0]));
+      items.add(_buildItem(widget.bannerStories[0]));
     }
     return items;
   }
@@ -125,8 +128,8 @@ class _BannerState extends State<HomeBanner> {
     realIndex = index;
     int count = widget.bannerStories.length;
     if (index == 0) {
-      virtualIndex = count - 1;
-      controller.jumpToPage(count);
+      virtualIndex = count - 1; // 用来更新轮播图indicator的，因为在创建轮播图时，在itemlist里前后都添加了一个元素，所以如果index==0，其实指示的应该是最后一个。如果index===count+1，指示的应该是第一个，其他情况下都应该index-1
+      controller.jumpToPage(count); // TODO：itemlist在前后都添加了一个额外的元素，那这里还有必要去修正jump的page吗？index==0，显示的就是最后一个的，jumpToPage（count）也只是调到原本应该显示的最后一个，这不都一样的吗？
     } else if (index == count + 1) {
       virtualIndex = 0;
       controller.jumpToPage(1);

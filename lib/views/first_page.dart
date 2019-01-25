@@ -67,6 +67,7 @@ class FirstPageState extends State<FirstPage> with AutomaticKeepAliveClientMixin
     });
   }
 
+  /// 获取flutter新闻列表
   Future<Map> getIndexListData([Map<String, dynamic> params]) async {
     const juejin_flutter = 'https://timeline-merger-ms.juejin.im/v1/get_tag_entry?src=web&tagId=5a96291f6fb9a0535b535438';
     var pageIndex = (params is Map) ? params['pageIndex'] : 0;
@@ -92,14 +93,15 @@ class FirstPageState extends State<FirstPage> with AutomaticKeepAliveClientMixin
     return result;
   }
 
+  /// 新闻列表item
   Widget makeCard(index,item){
-
     var myTitle = '${item.title}';
     var myUsername = '${'👲'}: ${item.username} ';
     var codeUrl = '${item.detailUrl}';
     return new ListViewItem(itemUrl:codeUrl,itemTitle: myTitle,data: myUsername,);
   }
 
+  /// 头部视图： 轮播图 免责声明
   headerView(){
     return
       Column(
@@ -108,7 +110,7 @@ class FirstPageState extends State<FirstPage> with AutomaticKeepAliveClientMixin
         //alignment: const FractionalOffset(0.9, 0.1),//方法一
         children: <Widget>[
             Pagination(),
-            Positioned(//方法二
+            Positioned(//方法二  // 绝对定位，免责声明，点击后出弹框
             top: 10.0,
             left: 0.0,
             child: DisclaimerMsg(key:key,pWidget:this)

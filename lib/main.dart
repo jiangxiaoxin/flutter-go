@@ -100,7 +100,11 @@ class _MyHomePageState extends State<MyHomePage>
     super.dispose();
   }
 
+  ///
+  /// 点击搜索结果后直接跳转相应的页面
+  ///
   void onWidgetTap(WidgetPoint widgetPoint, BuildContext context) {
+    // TODO:这里有必要每次都new新的实例吗？应该是没必要的，只是一堆配置型的数据而已，直接在Application里写个config就好了
     List widgetDemosList = new WidgetDemoList().getDemos();
     String targetName = widgetPoint.name;
     String targetRouter = '/category/error/404';
@@ -112,6 +116,7 @@ class _MyHomePageState extends State<MyHomePage>
     Application.router.navigateTo(context, "$targetRouter");
   }
 
+  /// 搜索栏和搜索页
   Widget buildSearchInput(BuildContext context) {
     return new SearchInput((value) async {
       if (value != '') {
