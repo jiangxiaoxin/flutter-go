@@ -25,9 +25,11 @@ class _BannerState extends State<HomeBanner> {
   @override
   void initState() {
     super.initState();
-    controller = PageController(initialPage: realIndex);
+    controller = PageController(initialPage: realIndex); // 初始默认显示页就是1，就是因为手动在最前添加了最后那个页的副本
     timer = Timer.periodic(Duration(seconds: 5), (timer) { // 自动滚动
-      /// print(realIndex);
+      // TODO：试试这样子都显示啥！
+      // TODO：如果跳的页超出了length呢？jumpTo和animateTo会有什么区别？
+      print(realIndex);
       controller.animateToPage(realIndex + 1,
           duration: Duration(milliseconds: 300),
           curve: Curves.linear);
@@ -124,12 +126,16 @@ class _BannerState extends State<HomeBanner> {
         children: indicators);
   }
 
+  //TODO：看下这个index是啥？应该是页面滚动之后的那个目标页码。
   _onPageChanged(int index) {
     realIndex = index;
     int count = widget.bannerStories.length;
     if (index == 0) {
       virtualIndex = count - 1; // 用来更新轮播图indicator的，因为在创建轮播图时，在itemlist里前后都添加了一个元素，所以如果index==0，其实指示的应该是最后一个。如果index===count+1，指示的应该是第一个，其他情况下都应该index-1
-      controller.jumpToPage(count); // TODO：itemlist在前后都添加了一个额外的元素，那这里还有必要去修正jump的page吗？index==0，显示的就是最后一个的，jumpToPage（count）也只是调到原本应该显示的最后一个，这不都一样的吗？
+      /// TODO：itemlist在前后都添加了一个额外的元素，那这里还有必要去修正jump的page吗？index==0，显示的就是最后一个的，jumpToPage（count）也只是调到原本应该显示的最后一个，这不都一样的吗？
+      /// count是原本要正常展示的最后一个页，0也是最后一个页，不过是因为手动在最前面添加了最后那个页。jumpToPage跳过去，中间就没有了缓动效果。
+      /// TODO：这里jumpToPage应该是为了修正realIndex的问题。设定timer去定时翻页，却从来没有重置realIndex值，用jump来改。但是这样真的好吗？
+      controller.jumpToPage(count);
     } else if (index == count + 1) {
       virtualIndex = 0;
       controller.jumpToPage(1);
